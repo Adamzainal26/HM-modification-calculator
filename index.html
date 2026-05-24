@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Engine CC & Compression Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel input-panel" aria-labelledby="input-title">
+        <div>
+          <p class="eyebrow">Engine specs</p>
+          <h1 id="input-title">CC, CR & DCR Calculator</h1>
+          <p class="intro">Enter the engine specs first. Results update automatically.</p>
+        </div>
+
+        <form id="calculator-form" class="spec-form">
+          <label>
+            <span>Bore</span>
+            <div class="field">
+              <input id="bore" name="bore" type="number" min="0" step="0.01" placeholder="e.g. 57">
+              <span>mm</span>
+            </div>
+          </label>
+
+          <label>
+            <span>Stroke</span>
+            <div class="field">
+              <input id="stroke" name="stroke" type="number" min="0" step="0.01" placeholder="e.g. 58.7">
+              <span>mm</span>
+            </div>
+          </label>
+
+          <label>
+            <span>IVC</span>
+            <div class="field">
+              <input id="ivc" name="ivc" type="number" min="0" step="0.01" placeholder="e.g. 65">
+              <span>deg</span>
+            </div>
+          </label>
+
+          <label>
+            <span>Volume</span>
+            <div class="field">
+              <input id="volume" name="volume" type="number" min="0" step="0.01" placeholder="e.g. 12">
+              <span>cc</span>
+            </div>
+          </label>
+        </form>
+      </section>
+
+      <section class="results" aria-labelledby="results-title">
+        <div class="results-header">
+          <div>
+            <p class="eyebrow">Calculated output</p>
+            <h2 id="results-title">Results</h2>
+          </div>
+          <button id="reset" type="button">Reset</button>
+        </div>
+
+        <div class="result-grid">
+          <article class="result-card">
+            <span>CC Motor</span>
+            <strong id="cc-motor">-</strong>
+            <small>pi x (bore / 2)^2 x stroke / 1000</small>
+          </article>
+
+          <article class="result-card">
+            <span>Stroke IVC</span>
+            <strong id="stroke-ivc">-</strong>
+            <small>IVC / 180 x stroke</small>
+          </article>
+
+          <article class="result-card">
+            <span>Stroke DCR</span>
+            <strong id="stroke-dcr">-</strong>
+            <small>stroke - stroke IVC</small>
+          </article>
+
+          <article class="result-card">
+            <span>CC DCR</span>
+            <strong id="cc-dcr">-</strong>
+            <small>pi x (bore / 2)^2 x stroke DCR / 1000</small>
+          </article>
+
+          <article class="result-card highlight">
+            <span>DCR</span>
+            <strong id="dcr">-</strong>
+            <small>(cc DCR + volume) / volume</small>
+          </article>
+
+          <article class="result-card highlight">
+            <span>CR</span>
+            <strong id="cr">-</strong>
+            <small>(cc motor + volume) / volume</small>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
