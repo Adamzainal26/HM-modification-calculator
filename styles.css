@@ -99,6 +99,19 @@ h2 {
   line-height: 1.6;
 }
 
+.version-mark {
+  width: fit-content;
+  margin: 18px 0 0;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
 .spec-form {
   display: grid;
   gap: 18px;
@@ -210,6 +223,16 @@ button:hover {
 
 .result-card.highlight strong {
   color: var(--accent);
+}
+
+.result-card.suggestion {
+  border-color: rgba(179, 106, 31, 0.32);
+  background: #fffaf4;
+}
+
+.result-card.suggestion strong {
+  color: var(--warning);
+  font-size: clamp(1.45rem, 3.4vw, 2.12rem);
 }
 
 @media (max-width: 860px) {

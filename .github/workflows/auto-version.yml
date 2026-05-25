@@ -1,0 +1,65 @@
+name: Auto Version
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump version
+        id: version
+        shell: bash
+        run: |
+          current="$(grep -Eo 'ver[0-9]+\.[0-9]+' index.html | head -n 1 | sed 's/ver//')"
+
+          if [ -z "$current" ]; then
+            echo "No version marker found in index.html"
+            exit 1
+          fi
+
+          major="${current%.*}"
+          minor="${current#*.}"
+
+          if [ "$minor" -ge 9 ]; then
+            major=$((major + 1))
+            minor=0
+          else
+            minor=$((minor + 1))
+          fi
+
+          next="ver${major}.${minor}"
+          echo "next=$next" >> "$GITHUB_OUTPUT"
+
+      - name: Apply version text
+        shell: bash
+        run: |
+          perl -0pi -e "s/ver[0-9]+\.[0-9]+/$ENV{NEXT_VERSION}/g" index.html
+        env:
+          NEXT_VERSION: ${{ steps.version.outputs.next }}
+
+      - name: Commit version bump
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No version change to commit"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Bump version to ${{ steps.version.outputs.next }}"
+          git push

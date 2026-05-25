@@ -15,6 +15,8 @@ const outputs = {
   ccDcr: document.querySelector("#cc-dcr"),
   dcr: document.querySelector("#dcr"),
   cr: document.querySelector("#cr"),
+  injectorSize: document.querySelector("#injector-size"),
+  throttleBody: document.querySelector("#throttle-body"),
 };
 
 function valueOf(input) {
@@ -34,6 +36,46 @@ function sweptCc(bore, stroke) {
   return (Math.PI * (bore / 2) ** 2 * stroke) / 1000;
 }
 
+function roundToStep(value, step) {
+  return Math.round(value / step) * step;
+}
+
+function formatRange(range, unit) {
+  return range ? `${range[0]}-${range[1]} ${unit}` : "-";
+}
+
+function injectorRange(cc) {
+  if (!Number.isFinite(cc)) {
+    return null;
+  }
+
+  const center = roundToStep(cc, 20);
+  const low = Math.max(0, center - 20);
+  const high = center + 20;
+
+  return [low, high];
+}
+
+function throttleBodyRange(cc) {
+  if (!Number.isFinite(cc)) {
+    return null;
+  }
+
+  let base;
+
+  if (cc < 125) base = 22;
+  else if (cc < 150) base = 24;
+  else if (cc < 180) base = 26;
+  else if (cc < 220) base = 28;
+  else if (cc < 260) base = 30;
+  else if (cc < 320) base = 34;
+  else if (cc < 400) base = 38;
+  else base = 42;
+
+  const low = base + 2;
+  return [low, low + 6];
+}
+
 function calculate() {
   const bore = valueOf(inputs.bore);
   const stroke = valueOf(inputs.stroke);
@@ -48,6 +90,8 @@ function calculate() {
   const hasVolume = volume !== null && volume > 0;
   const dcr = ccDcr !== null && hasVolume ? (ccDcr + volume) / volume : null;
   const cr = ccMotor !== null && hasVolume ? (ccMotor + volume) / volume : null;
+  const injector = injectorRange(ccMotor);
+  const throttleBody = throttleBodyRange(ccMotor);
 
   outputs.ccMotor.textContent = ccMotor !== null ? `${round(ccMotor)} cc` : "-";
   outputs.strokeIvc.textContent = strokeIvc !== null ? `${round(strokeIvc)} mm` : "-";
@@ -55,6 +99,8 @@ function calculate() {
   outputs.ccDcr.textContent = ccDcr !== null ? `${round(ccDcr)} cc` : "-";
   outputs.dcr.textContent = formatRatio(dcr);
   outputs.cr.textContent = formatRatio(cr);
+  outputs.injectorSize.textContent = formatRange(injector, "cc/min");
+  outputs.throttleBody.textContent = formatRange(throttleBody, "mm");
 }
 
 form.addEventListener("input", calculate);
