@@ -69,6 +69,14 @@ input {
   text-transform: uppercase;
 }
 
+.brand-logo {
+  display: block;
+  width: min(230px, 72%);
+  height: auto;
+  margin-bottom: 26px;
+  filter: drop-shadow(0 8px 14px rgba(24, 33, 31, 0.26));
+}
+
 h1,
 h2,
 p {
