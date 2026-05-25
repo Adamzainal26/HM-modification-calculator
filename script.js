@@ -17,6 +17,8 @@ const outputs = {
   cr: document.querySelector("#cr"),
   injectorSize: document.querySelector("#injector-size"),
   throttleBody: document.querySelector("#throttle-body"),
+  intakeValve: document.querySelector("#intake-valve"),
+  exhaustValve: document.querySelector("#exhaust-valve"),
 };
 
 function valueOf(input) {
@@ -76,6 +78,10 @@ function throttleBodyRange(cc) {
   return [low, low + 6];
 }
 
+function valveSize(bore, multiplier) {
+  return Number.isFinite(bore) ? (bore / 2) * multiplier : null;
+}
+
 function calculate() {
   const bore = valueOf(inputs.bore);
   const stroke = valueOf(inputs.stroke);
@@ -92,6 +98,8 @@ function calculate() {
   const cr = ccMotor !== null && hasVolume ? (ccMotor + volume) / volume : null;
   const injector = injectorRange(ccMotor);
   const throttleBody = throttleBodyRange(ccMotor);
+  const intakeValve = valveSize(bore, 0.765);
+  const exhaustValve = valveSize(bore, 0.665);
 
   outputs.ccMotor.textContent = ccMotor !== null ? `${round(ccMotor)} cc` : "-";
   outputs.strokeIvc.textContent = strokeIvc !== null ? `${round(strokeIvc)} mm` : "-";
@@ -101,6 +109,8 @@ function calculate() {
   outputs.cr.textContent = formatRatio(cr);
   outputs.injectorSize.textContent = formatRange(injector, "cc/min");
   outputs.throttleBody.textContent = formatRange(throttleBody, "mm");
+  outputs.intakeValve.textContent = intakeValve !== null ? `${round(intakeValve)} mm` : "-";
+  outputs.exhaustValve.textContent = exhaustValve !== null ? `${round(exhaustValve)} mm` : "-";
 }
 
 form.addEventListener("input", calculate);
