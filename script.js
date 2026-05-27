@@ -86,16 +86,17 @@ function calculate() {
   const bore = valueOf(inputs.bore);
   const stroke = valueOf(inputs.stroke);
   const ivc = valueOf(inputs.ivc);
-  const volume = valueOf(inputs.volume);
+  const buretVolume = valueOf(inputs.volume);
+  const adjustedVolume = buretVolume !== null ? buretVolume - 0.8 : null;
 
   const hasBoreStroke = bore !== null && stroke !== null;
   const ccMotor = hasBoreStroke ? sweptCc(bore, stroke) : null;
   const strokeIvc = stroke !== null && ivc !== null ? (ivc / 180) * stroke : null;
   const strokeDcr = stroke !== null && strokeIvc !== null ? stroke - strokeIvc : null;
   const ccDcr = bore !== null && strokeDcr !== null ? sweptCc(bore, strokeDcr) : null;
-  const hasVolume = volume !== null && volume > 0;
-  const dcr = ccDcr !== null && hasVolume ? (ccDcr + volume) / volume : null;
-  const cr = ccMotor !== null && hasVolume ? (ccMotor + volume) / volume : null;
+  const hasVolume = adjustedVolume !== null && adjustedVolume > 0;
+  const dcr = ccDcr !== null && hasVolume ? (ccDcr + adjustedVolume) / adjustedVolume : null;
+  const cr = ccMotor !== null && hasVolume ? (ccMotor + adjustedVolume) / adjustedVolume : null;
   const injector = injectorRange(ccMotor);
   const throttleBody = throttleBodyRange(ccMotor);
   const intakeValve = valveSize(bore, 0.765);

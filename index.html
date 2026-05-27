@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Engine CC & Compression Calculator</title>
+    <title>HM Modification Calculator v2</title>
     <link rel="icon" type="image/png" href="logo1-clean.png">
     <link rel="apple-touch-icon" href="logo1-clean.png">
     <link rel="stylesheet" href="styles.css">
@@ -45,11 +45,12 @@
           </label>
 
           <label>
-            <span>Volume</span>
+            <span>Buret Volume</span>
             <div class="field">
               <input id="volume" name="volume" type="number" min="0" step="0.01" placeholder="e.g. 12">
               <span>cc</span>
             </div>
+            <small class="field-help">Combustion chamber volume measured by filling with a buret. Calculator uses this value minus 0.8 cc.</small>
           </label>
         </form>
       </section>
@@ -91,13 +92,13 @@
           <article class="result-card highlight">
             <span>DCR</span>
             <strong id="dcr">-</strong>
-            <small>(cc DCR + volume) / volume</small>
+            <small>(cc DCR + adjusted volume) / adjusted volume</small>
           </article>
 
           <article class="result-card highlight">
             <span>CR</span>
             <strong id="cr">-</strong>
-            <small>(cc motor + volume) / volume</small>
+            <small>(cc motor + adjusted volume) / adjusted volume</small>
           </article>
 
           <article class="result-card suggestion">
